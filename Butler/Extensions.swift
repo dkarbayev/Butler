@@ -57,18 +57,12 @@ extension UILabel {
 
 extension UIFont {
     var monospacedDigitFont: UIFont {
-        let oldFontDescriptor = fontDescriptor()
-        let newFontDescriptor = oldFontDescriptor.monospacedDigitFontDescriptor
-        return UIFont(descriptor: newFontDescriptor, size: 0)
-    }
-}
-
-extension UIFontDescriptor {
-    var monospacedDigitFontDescriptor: UIFontDescriptor {
         let fontDescriptorFeatureSettings = [[UIFontFeatureTypeIdentifierKey: kNumberSpacingType, UIFontFeatureSelectorIdentifierKey: kMonospacedNumbersSelector]]
         let fontDescriptorAttributes = [UIFontDescriptorFeatureSettingsAttribute: fontDescriptorFeatureSettings]
-        let fontDescriptor = self.fontDescriptorByAddingAttributes(fontDescriptorAttributes)
-        return fontDescriptor
+        let oldFontDescriptor = fontDescriptor()
+        let newFontDescriptor = oldFontDescriptor.fontDescriptorByAddingAttributes(fontDescriptorAttributes)
+
+        return UIFont(descriptor: newFontDescriptor, size: 0)
     }
 }
 
@@ -126,7 +120,7 @@ public extension UIImage {
     // The bounds will be adjusted using CGRectIntegral.
     // This method ignores the image's imageOrientation setting.
     func croppedImage(bounds: CGRect) -> UIImage {
-        let imageRef:CGImageRef = CGImageCreateWithImageInRect(self.CGImage, bounds)!
+        let imageRef:CGImageRef = CGImageCreateWithImageInRect(self.CGImage!, bounds)!
         return UIImage(CGImage: imageRef)
     }
 
@@ -189,7 +183,7 @@ public extension UIImage {
             Int(newRect.size.height),
             CGImageGetBitsPerComponent(imageRef),
             0,
-            CGImageGetColorSpace(imageRef),
+            CGImageGetColorSpace(imageRef)!,
             CGImageAlphaInfo.NoneSkipLast.rawValue//CGImageGetBitmapInfo(imageRef).rawValue
             )!
 
